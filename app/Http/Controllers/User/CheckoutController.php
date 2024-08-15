@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\Camps;
-use Illuminate\Http\Request;
-use App\Models\Checkout;
-use Auth;
 use App\Http\Requests\User\Checkout\Store;
+use App\Http\Controllers\Controller;
+use App\Mail\Checkout\AfterCheckout;
+use Illuminate\Http\Request;
 use PharIo\Manifest\Email;
-
+use App\Models\Checkout;
+use App\Models\Camps;
+use Auth;
+use Mail;
 class CheckoutController extends Controller
 {
   /**
@@ -66,7 +67,8 @@ class CheckoutController extends Controller
     //create table checkout
     $checkout = Checkout::create($data);
 
-
+    //sending email
+    Mail::to(Auth::user()->email)->send(new AfterCheckout($checkout));
 
     return redirect(route('checkout.success'));
   }
@@ -119,5 +121,10 @@ class CheckoutController extends Controller
   public function success()
   {
     return view('checkout.success');
+  }
+
+  function invoice(Checkout $checkout)
+  {
+    return $checkout;
   }
 }
