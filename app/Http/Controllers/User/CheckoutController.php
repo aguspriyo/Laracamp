@@ -72,6 +72,8 @@ class CheckoutController extends Controller
     $user->email = $data['email'];
     $user->name = $data['name'];
     $user->occupation = $data['occupation'];
+    $user->phone = $data['phone'];
+    $user->address = $data['address'];
     $user->save();
 
     //create table checkout
@@ -147,11 +149,11 @@ class CheckoutController extends Controller
       'gross_amount' => $checkout->Camp->price * 1000
     ];
 
-    $item_details = [
+    $item_details[] = [
       'id' => $orderId,
       'price' => $price,
       'quantity' => 1,
-      'name' => `Payment for {$checkout->Camp->title} Camp`
+      'name' => "Payment for {$checkout->Camp->title} Camp"
     ];
 
     $userData = [
@@ -184,6 +186,7 @@ class CheckoutController extends Controller
       //get snap payment page URL
       $paymentUrl = \Midtrans\Snap::createTransaction($midtrans_params)->redirect_url;
       $checkout->midtrans_url = $paymentUrl;
+      //$checkout->total = $total;
       $checkout->save();
 
       return $paymentUrl;
