@@ -52,9 +52,9 @@ Route::get('auth/google/callback', [UserController::class, 'handleProviderCallba
 
 //midtrans routes
 
-Route::get('payment/success', [UserController::class, 'midtransCallback']);
+Route::get('payment/success', [CheckoutController::class, 'midtransCallback']);
 
-Route::post('payment/success', [UserController::class, 'midtransCallback']);
+Route::post('payment/success', [CheckoutController::class, 'midtransCallback']);
 
 //user dashboard
 Route::prefix('user/dashboard')->namespace('User')->name('user.')->middleware('esureUserRole:user')->group(function () {
